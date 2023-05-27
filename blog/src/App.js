@@ -20,6 +20,8 @@ function App() {
 
   let [current, setCurrent] = useState(0);
 
+  let [input, setInput] = useState('');
+
   /**
    * In React, to change a part of array/object state, we need to make an independent copy = shallow copy or deep copy
    * good to preserve the original
@@ -64,19 +66,46 @@ function App() {
         title.map(function(a, i){
           return (
             <div className="list" key={i}>
-              <h4 onClick={()=>{ setModal(!modal); setCurrent(i) }}>{ title[i] } <span onClick={ ()=>{
-                let copy = [...like];
-                copy[i] += 1;
-                setLike(copy); 
-              } }>👍</span> {like[i]}</h4>
+              <h4 onClick={()=>{ setModal(!modal); setCurrent(i) }}> 
+                { title[i] } 
+                <span onClick={ (e)=>{
+                  e.stopPropagation();
+                  let copy = [...like];
+                  copy[i] += 1;
+                  setLike(copy); 
+                } }>👍</span> {like[i]}
+              </h4>
               <p>published 02.14</p>
+              <button onClick={()=>{
+                let copy = [...title];
+                copy.splice(i, 1);
+                setTitle(copy);
+
+                let copy2 = [...like];
+                copy2.splice(i, 1);
+                setLike(copy2);
+              }}>delete</button>
             </div>
           )
         })
       }
 
+      <input onChange={(e)=>{ setInput(e.target.value) }} />  
+
+      <button onClick={()=>{
+        let copy = [...title];
+        copy.unshift(input);
+        setTitle(copy);
+        
+        let copy2 = [...like];
+        copy2.unshift(0);
+        setLike(copy2);
+      }}>addPost</button>
+
       {
-       modal == true ? <Modal current={current} title={title}/> : null 
+        modal == true ?
+          <Modal current={current} title={title}/>
+          : null 
       }
       
     </div>
@@ -141,3 +170,24 @@ export default App;
     )
   }
  */
+
+// OLD React Syntax to create component using class
+//
+// class Modal2 extends React.Component {
+//   constructor(props){
+//     super(props);
+//     this.state = {
+//       name : 'kim',
+//       age : 20
+//     }
+//   }
+//   render(){
+//     return (
+//       <div>Hello {this.state.age} 
+//       <button onClick={()=>{
+//         this.setState({age : 21})
+//       }}>button</button>
+//       </div>
+//     )
+//   }
+// }
